@@ -1,10 +1,11 @@
 <script lang="ts">
     import Calculator from "./Calculator.svelte";
     import Output from "./Output.svelte";
+    export let tipOptions;
 </script>
 
 <div id="card">
-    <Calculator />
+    <Calculator {tipOptions} />
     <Output />
 </div>
 

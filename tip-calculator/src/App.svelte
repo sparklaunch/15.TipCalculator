@@ -1,5 +1,6 @@
 <script lang="ts">
     import Card from "./components/Card.svelte";
+    const tipOptions: Number[] = [5, 10, 15, 25, 50];
 </script>
 
 <div id="app">
@@ -8,7 +9,7 @@
             <h1>SPLI</h1>
             <h1>TTER</h1>
         </div>
-        <Card />
+        <Card {tipOptions} />
     </div>
 </div>
 
