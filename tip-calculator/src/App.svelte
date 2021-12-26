@@ -28,4 +28,9 @@
         letter-spacing: 8px;
         font-size: 24px;
     }
+    #container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 </style>

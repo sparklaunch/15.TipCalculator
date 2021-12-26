@@ -13,7 +13,7 @@
     #card {
         border-radius: 20px;
         background-color: white;
-        padding: 30px;
+        padding: 40px;
         display: flex;
         width: 800px;
     }

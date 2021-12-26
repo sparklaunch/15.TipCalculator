@@ -22,6 +22,13 @@
             </div>
         </div>
     </div>
+    <div id="number-of-people">
+        <h2>Number of People</h2>
+        <div id="number-of-people-input">
+            <img src="/assets/icon-person.svg" alt="Person" />
+            <input type="text" value="0" />
+        </div>
+    </div>
 </div>
 
 <style>
@@ -63,6 +70,7 @@
         display: flex;
         flex-direction: column;
         align-items: stretch;
+        margin-bottom: 30px;
     }
     #tip-selection > h2 {
         font-size: 16px;
@@ -86,5 +94,26 @@
         font-weight: 700;
         text-align: center;
         color: rgb(66, 97, 93);
+    }
+    #number-of-people > h2 {
+        font-size: 16px;
+        color: rgb(86, 103, 102);
+        margin-bottom: 3px;
+    }
+    #number-of-people-input {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 10px;
+        background-color: rgb(241, 247, 250);
+        padding: 10px 20px;
+    }
+    #number-of-people-input > input {
+        border: none;
+        background-color: transparent;
+        font-size: 20px;
+        color: rgb(154, 177, 175);
+        text-align: right;
+        outline: none;
     }
 </style>
