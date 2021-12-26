@@ -106,7 +106,7 @@
 
 <style>
     #calculator {
-        width: 50%;
+        width: 47.5%;
     }
     #bill {
         display: flex;
