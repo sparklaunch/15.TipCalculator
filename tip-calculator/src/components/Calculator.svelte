@@ -70,7 +70,7 @@
     <div id="bill">
         <h2>Bill</h2>
         <div id="bill-input">
-            <p>$</p>
+            <img src="/assets/icon-dollar.svg" alt="Dollar Sign" />
             <input
                 type="text"
                 placeholder="0"
@@ -126,10 +126,6 @@
         border-radius: 10px;
         background-color: rgb(241, 247, 250);
         padding: 10px 20px;
-    }
-    #bill-input > p {
-        font-size: 20px;
-        color: rgb(154, 177, 175);
     }
     #bill-input > input {
         border: none;
