@@ -11,3 +11,6 @@ body {
 body {
     background-color: rgb(189, 224, 228);
 }
+::placeholder {
+    color: rgb(143, 168, 166);
+}

@@ -16,5 +16,6 @@
         padding: 40px;
         display: flex;
         width: 800px;
+        box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
     }
 </style>

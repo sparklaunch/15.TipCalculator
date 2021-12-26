@@ -1,6 +1,69 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import TipOption from "./TipOption.svelte";
     export let tipOptions;
+    let billString: string = "";
+    $: bill = Number(billString);
+    let numberOfPeopleString: string = "";
+    $: numberOfPeople = Number(numberOfPeopleString);
+    let billInput: HTMLInputElement;
+    let numberOfPeopleInput: HTMLInputElement;
+
+    // Courtesy of Stackoverflow...
+    function setInputFilter(
+        textbox: Element,
+        inputFilter: (value: string) => boolean
+    ): void {
+        [
+            "input",
+            "keydown",
+            "keyup",
+            "mousedown",
+            "mouseup",
+            "select",
+            "contextmenu",
+            "drop"
+        ].forEach(function (event) {
+            textbox.addEventListener(
+                event,
+                function (
+                    this: (HTMLInputElement | HTMLTextAreaElement) & {
+                        oldValue: string;
+                        oldSelectionStart: number | null;
+                        oldSelectionEnd: number | null;
+                    }
+                ) {
+                    if (inputFilter(this.value)) {
+                        this.oldValue = this.value;
+                        this.oldSelectionStart = this.selectionStart;
+                        this.oldSelectionEnd = this.selectionEnd;
+                    } else if (
+                        Object.prototype.hasOwnProperty.call(this, "oldValue")
+                    ) {
+                        this.value = this.oldValue;
+                        if (
+                            this.oldSelectionStart !== null &&
+                            this.oldSelectionEnd !== null
+                        ) {
+                            this.setSelectionRange(
+                                this.oldSelectionStart,
+                                this.oldSelectionEnd
+                            );
+                        }
+                    } else {
+                        this.value = "";
+                    }
+                }
+            );
+        });
+    }
+    onMount(() => {
+        [billInput, numberOfPeopleInput].forEach((input) => {
+            setInputFilter(input, (value) => {
+                return /^\d*\.?\d*$/.test(value);
+            });
+        });
+    });
 </script>
 
 <div id="calculator">
@@ -8,7 +71,12 @@
         <h2>Bill</h2>
         <div id="bill-input">
             <p>$</p>
-            <input type="text" value="0" />
+            <input
+                type="text"
+                placeholder="0"
+                bind:this={billInput}
+                bind:value={billString}
+            />
         </div>
     </div>
     <div id="tip-selection">
@@ -26,7 +94,12 @@
         <h2>Number of People</h2>
         <div id="number-of-people-input">
             <img src="/assets/icon-person.svg" alt="Person" />
-            <input type="text" value="0" />
+            <input
+                type="text"
+                placeholder="0"
+                bind:this={numberOfPeopleInput}
+                bind:value={numberOfPeopleString}
+            />
         </div>
     </div>
 </div>
