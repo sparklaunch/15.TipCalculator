@@ -194,12 +194,18 @@
     }
     #bill-input > input {
         border: none;
+        font-weight: 700;
         background-color: transparent;
         font-size: 20px;
         color: rgb(154, 177, 175);
         text-align: right;
         outline: none;
         cursor: pointer;
+        transition: color 0.3s;
+    }
+    #bill-input > input:focus {
+        color: rgb(0, 29, 12);
+        font-weight: 700;
     }
     #tip-selection {
         display: flex;
@@ -265,10 +271,15 @@
         border: none;
         background-color: transparent;
         font-size: 20px;
+        font-weight: 700;
         color: rgb(154, 177, 175);
         text-align: right;
         outline: none;
         cursor: pointer;
+        transition: color 0.3s;
+    }
+    #number-of-people-input > input:focus {
+        color: rgb(0, 42, 51);
     }
     .focused {
         border: 2px solid rgb(81, 162, 152) !important;
