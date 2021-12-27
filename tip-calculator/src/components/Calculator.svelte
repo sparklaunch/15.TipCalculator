@@ -8,6 +8,10 @@
     $: numberOfPeople = Number(numberOfPeopleString);
     let billInput: HTMLInputElement;
     let numberOfPeopleInput: HTMLInputElement;
+    let isBillFocused: boolean = false;
+    let isNumberOfPeopleFocused: boolean = false;
+    let isCustomOptionEnabled: boolean = false;
+    let customOptionField: HTMLElement;
 
     // Courtesy of Stackoverflow...
     function setInputFilter(
@@ -57,6 +61,30 @@
             );
         });
     }
+    const focusHandler: (any) => void = (event) => {
+        if (event.target.id === "input-bill") {
+            isBillFocused = true;
+        } else if (event.target.id === "input-number-of-people") {
+            isNumberOfPeopleFocused = true;
+        }
+    };
+    const blurHandler: (any) => void = (event) => {
+        if (event.target.id === "input-bill") {
+            isBillFocused = false;
+        } else if (event.target.id === "input-number-of-people") {
+            isNumberOfPeopleFocused = false;
+        }
+    };
+    const customOptionClickHandler: (any) => void = (event) => {
+        isCustomOptionEnabled = true;
+        customOptionField.focus();
+    };
+    const windowClickHandler: (any) => void = (event) => {
+        const id: string = event.target.id;
+        if (id !== "custom-option" && id !== "custom-label") {
+            isCustomOptionEnabled = false;
+        }
+    };
     onMount(() => {
         [billInput, numberOfPeopleInput].forEach((input) => {
             setInputFilter(input, (value) => {
@@ -66,16 +94,20 @@
     });
 </script>
 
+<svelte:window on:click={windowClickHandler} />
 <div id="calculator">
     <div id="bill">
         <h2>Bill</h2>
-        <div id="bill-input">
+        <div id="bill-input" class:focused={isBillFocused}>
             <img src="/assets/icon-dollar.svg" alt="Dollar Sign" />
             <input
                 type="text"
+                id="input-bill"
                 placeholder="0"
                 bind:this={billInput}
                 bind:value={billString}
+                on:focus={focusHandler}
+                on:blur={blurHandler}
             />
         </div>
     </div>
@@ -85,20 +117,34 @@
             {#each tipOptions as option}
                 <TipOption data={option} />
             {/each}
-            <div id="custom-option">
-                <p>Custom</p>
+            <div
+                id="custom-option"
+                class:focused={isCustomOptionEnabled}
+                bind:this={customOptionField}
+                on:click={customOptionClickHandler}
+                contenteditable={isCustomOptionEnabled}
+            >
+                {#if !isCustomOptionEnabled}
+                    <p id="custom-label">Custom</p>
+                {/if}
             </div>
         </div>
     </div>
     <div id="number-of-people">
         <h2>Number of People</h2>
-        <div id="number-of-people-input">
+        <div
+            id="number-of-people-input"
+            class:focused={isNumberOfPeopleFocused}
+        >
             <img src="/assets/icon-person.svg" alt="Person" />
             <input
                 type="text"
+                id="input-number-of-people"
                 placeholder="0"
                 bind:this={numberOfPeopleInput}
                 bind:value={numberOfPeopleString}
+                on:focus={focusHandler}
+                on:blur={blurHandler}
             />
         </div>
     </div>
@@ -126,6 +172,8 @@
         border-radius: 10px;
         background-color: rgb(241, 247, 250);
         padding: 10px 20px;
+        border: 2px solid transparent;
+        transition: border 0.3s;
     }
     #bill-input > input {
         border: none;
@@ -134,6 +182,7 @@
         color: rgb(154, 177, 175);
         text-align: right;
         outline: none;
+        cursor: pointer;
     }
     #tip-selection {
         display: flex;
@@ -157,6 +206,13 @@
         background-color: rgb(241, 247, 250);
         padding: 8px;
         cursor: pointer;
+        transition: background-color 0.3s;
+        border: 2px solid transparent;
+        transition: border 0.3s;
+        outline: none;
+    }
+    #custom-option:hover {
+        background-color: rgb(148, 229, 219);
     }
     #custom-option > p {
         font-size: 22px;
@@ -176,6 +232,8 @@
         border-radius: 10px;
         background-color: rgb(241, 247, 250);
         padding: 10px 20px;
+        border: 2px solid transparent;
+        transition: border 0.3s;
     }
     #number-of-people-input > input {
         border: none;
@@ -184,5 +242,9 @@
         color: rgb(154, 177, 175);
         text-align: right;
         outline: none;
+        cursor: pointer;
+    }
+    .focused {
+        border: 2px solid rgb(81, 162, 152) !important;
     }
 </style>
