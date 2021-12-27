@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { afterUpdate, onMount } from "svelte";
     import TipOption from "./TipOption.svelte";
     export let tipOptions;
     let billString: string = "";
@@ -11,7 +11,7 @@
     let isBillFocused: boolean = false;
     let isNumberOfPeopleFocused: boolean = false;
     let isCustomOptionEnabled: boolean = false;
-    let customOptionField: HTMLElement;
+    let customOptionField: HTMLInputElement;
 
     // Courtesy of Stackoverflow...
     function setInputFilter(
@@ -77,11 +77,14 @@
     };
     const customOptionClickHandler: (any) => void = (event) => {
         isCustomOptionEnabled = true;
-        customOptionField.focus();
     };
     const windowClickHandler: (any) => void = (event) => {
         const id: string = event.target.id;
-        if (id !== "custom-option" && id !== "custom-label") {
+        if (
+            id !== "custom-option" &&
+            id !== "custom-label" &&
+            id !== "custom-input"
+        ) {
             isCustomOptionEnabled = false;
         }
     };
@@ -91,6 +94,16 @@
                 return /^\d*\.?\d*$/.test(value);
             });
         });
+    });
+    afterUpdate(() => {
+        if (customOptionField) {
+            setInputFilter(customOptionField, (value) => {
+                return /^\d*\.?\d*$/.test(value);
+            });
+        }
+        if (customOptionField && isCustomOptionEnabled) {
+            customOptionField.focus();
+        }
     });
 </script>
 
@@ -120,12 +133,16 @@
             <div
                 id="custom-option"
                 class:focused={isCustomOptionEnabled}
-                bind:this={customOptionField}
                 on:click={customOptionClickHandler}
-                contenteditable={isCustomOptionEnabled}
             >
                 {#if !isCustomOptionEnabled}
                     <p id="custom-label">Custom</p>
+                {:else}
+                    <input
+                        type="text"
+                        id="custom-input"
+                        bind:this={customOptionField}
+                    />
                 {/if}
             </div>
         </div>
@@ -206,9 +223,8 @@
         background-color: rgb(241, 247, 250);
         padding: 8px;
         cursor: pointer;
-        transition: background-color 0.3s;
+        transition: background-color 0.3s, border 0.3s;
         border: 2px solid transparent;
-        transition: border 0.3s;
         outline: none;
     }
     #custom-option:hover {
@@ -219,6 +235,16 @@
         font-weight: 700;
         text-align: center;
         color: rgb(66, 97, 93);
+    }
+    #custom-option > input {
+        outline: none;
+        background-color: transparent;
+        width: 100%;
+        border: none;
+        font-size: 22px;
+        font-weight: 700;
+        text-align: center;
+        color: rgb(0, 26, 18);
     }
     #number-of-people > h2 {
         font-size: 16px;
