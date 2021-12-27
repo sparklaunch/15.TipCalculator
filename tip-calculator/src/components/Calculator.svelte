@@ -12,6 +12,8 @@
     let isNumberOfPeopleFocused: boolean = false;
     let isCustomOptionEnabled: boolean = false;
     let customOptionField: HTMLInputElement;
+    let isBillZero: boolean = false;
+    let isNumberOfPeopleZero: boolean = false;
 
     // Courtesy of Stackoverflow...
     function setInputFilter(
@@ -69,10 +71,23 @@
         }
     };
     const blurHandler: (any) => void = (event) => {
+        const isZero: RegExp = new RegExp(/^[0\.]*$/);
         if (event.target.id === "input-bill") {
+            billString = String(bill);
             isBillFocused = false;
+            if (isZero.test(event.target.value)) {
+                isBillZero = true;
+            } else {
+                isBillZero = false;
+            }
         } else if (event.target.id === "input-number-of-people") {
             isNumberOfPeopleFocused = false;
+            numberOfPeopleString = String(numberOfPeople);
+            if (isZero.test(event.target.value)) {
+                isNumberOfPeopleZero = true;
+            } else {
+                isNumberOfPeopleZero = false;
+            }
         }
     };
     const customOptionClickHandler: (any) => void = (event) => {
@@ -111,7 +126,14 @@
 <div id="calculator">
     <div id="bill">
         <h2>Bill</h2>
-        <div id="bill-input" class:focused={isBillFocused}>
+        {#if isBillZero}
+            <p class="warning-zero">Can't be zero</p>
+        {/if}
+        <div
+            id="bill-input"
+            class:focused={isBillFocused}
+            class:warning={isBillZero}
+        >
             <img src="/assets/icon-dollar.svg" alt="Dollar Sign" />
             <input
                 type="text"
@@ -149,9 +171,13 @@
     </div>
     <div id="number-of-people">
         <h2>Number of People</h2>
+        {#if isNumberOfPeopleZero}
+            <p class="warning-zero">Can't be zero</p>
+        {/if}
         <div
             id="number-of-people-input"
             class:focused={isNumberOfPeopleFocused}
+            class:warning={isNumberOfPeopleZero}
         >
             <img src="/assets/icon-person.svg" alt="Person" />
             <input
@@ -176,6 +202,7 @@
         flex-direction: column;
         align-items: stretch;
         margin-bottom: 30px;
+        position: relative;
     }
     #bill > h2 {
         font-size: 16px;
@@ -252,6 +279,9 @@
         text-align: center;
         color: rgb(0, 26, 18);
     }
+    #number-of-people {
+        position: relative;
+    }
     #number-of-people > h2 {
         font-size: 16px;
         color: rgb(86, 103, 102);
@@ -283,5 +313,16 @@
     }
     .focused {
         border: 2px solid rgb(81, 162, 152) !important;
+    }
+    .warning {
+        border: 2px solid rgb(198, 114, 99) !important;
+    }
+    .warning-zero {
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: rgb(198, 114, 99);
     }
 </style>
