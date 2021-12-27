@@ -1,9 +1,18 @@
 <script lang="ts">
+    import { createEventDispatcher } from "svelte";
     export let data;
+    export let index;
+    export let active;
     $: text = `${data}%`;
+    const dispatcher = createEventDispatcher();
+    const clickHandler = (event) => {
+        dispatcher("option-clicked", {
+            index
+        });
+    };
 </script>
 
-<div class="tip-option">
+<div class="tip-option" on:click={clickHandler} class:active>
     <p>{text}</p>
 </div>
 
@@ -28,5 +37,9 @@
         font-size: 22px;
         text-align: center;
         transition: color 0.3s;
+    }
+    .active {
+        background-color: rgb(35, 186, 164);
+        color: rgb(0, 59, 63);
     }
 </style>

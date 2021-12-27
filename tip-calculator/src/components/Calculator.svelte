@@ -14,6 +14,8 @@
     let customOptionField: HTMLInputElement;
     let isBillZero: boolean = false;
     let isNumberOfPeopleZero: boolean = false;
+    let optionIndex: number;
+    $: tipRate = tipOptions[optionIndex];
 
     // Courtesy of Stackoverflow...
     function setInputFilter(
@@ -103,6 +105,10 @@
             isCustomOptionEnabled = false;
         }
     };
+    const optionClickHandler: (any) => void = (event) => {
+        const index: number = event.detail.index;
+        optionIndex = index;
+    };
     onMount(() => {
         [billInput, numberOfPeopleInput].forEach((input) => {
             setInputFilter(input, (value) => {
@@ -149,8 +155,13 @@
     <div id="tip-selection">
         <h2>Select Tip %</h2>
         <div id="tip-options">
-            {#each tipOptions as option}
-                <TipOption data={option} />
+            {#each tipOptions as option, index}
+                <TipOption
+                    data={option}
+                    {index}
+                    active={optionIndex === index}
+                    on:option-clicked={optionClickHandler}
+                />
             {/each}
             <div
                 id="custom-option"
