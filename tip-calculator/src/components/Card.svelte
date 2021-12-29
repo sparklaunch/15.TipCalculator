@@ -2,6 +2,7 @@
     import Calculator from "./Calculator.svelte";
     import Output from "./Output.svelte";
     export let tipOptions;
+    let wasResetClicked: boolean = false;
     let data: Data = {
         tipRate: 0,
         bill: 0,
@@ -19,6 +20,13 @@
     const calculateHandler: (any) => void = (event) => {
         data = event.detail;
     };
+    const resetHandler: () => void = () => {
+        wasResetClicked = true;
+        isButtonDisabled = true;
+    };
+    const didReset: () => void = () => {
+        wasResetClicked = false;
+    };
 </script>
 
 <div id="card">
@@ -26,8 +34,10 @@
         {tipOptions}
         on:enable-button={enableButtonHandler}
         on:ready-to-calculate={calculateHandler}
+        reset={wasResetClicked}
+        on:did-reset={didReset}
     />
-    <Output {isButtonDisabled} {data} />
+    <Output {isButtonDisabled} {data} on:reset={resetHandler} />
 </div>
 
 <style>

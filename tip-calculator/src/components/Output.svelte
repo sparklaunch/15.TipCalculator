@@ -1,11 +1,14 @@
 <script lang="ts">
+    import { createEventDispatcher } from "svelte";
     export let isButtonDisabled;
     export let data;
+    const dispatcher = createEventDispatcher();
     $: tipRate = data.tipRate;
     $: bill = data.bill;
     $: numberOfPeople = data.numberOfPeople;
     $: tipAmountPerPerson = (bill * (tipRate / 100)) / numberOfPeople;
-    $: isTipAmountPerPersonNaN = Number.isNaN(tipAmountPerPerson);
+    $: isTipAmountPerPersonNaN =
+        Number.isNaN(tipAmountPerPerson) || tipAmountPerPerson === 0;
     $: stringifiedTipAmountPerPerson = tipAmountPerPerson.toLocaleString(
         undefined,
         {
@@ -13,10 +16,19 @@
         }
     );
     $: totalPerPerson = (bill * (1 + tipRate / 100)) / numberOfPeople;
-    $: isTotalPerPersonNaN = Number.isNaN(totalPerPerson);
+    $: isTotalPerPersonNaN =
+        Number.isNaN(totalPerPerson) || totalPerPerson === 0;
     $: stringifiedTotalPerPerson = totalPerPerson.toLocaleString(undefined, {
         minimumFractionDigits: 2
     });
+    const resetClickHandler: () => void = () => {
+        dispatcher("reset");
+        data = {
+            tipRate: 0,
+            numberOfPeople: 0,
+            bill: 0
+        };
+    };
 </script>
 
 <div id="output">
@@ -46,7 +58,9 @@
             {/if}
         </div>
     </div>
-    <button id="reset" disabled={isButtonDisabled}>RESET</button>
+    <button id="reset" disabled={isButtonDisabled} on:click={resetClickHandler}
+        >RESET</button
+    >
 </div>
 
 <style>

@@ -2,6 +2,7 @@
     import { afterUpdate, onMount, createEventDispatcher } from "svelte";
     import TipOption from "./TipOption.svelte";
     export let tipOptions;
+    export let reset;
     let billString: string = "";
     $: bill = Number(billString);
     let numberOfPeopleString: string = "";
@@ -23,6 +24,9 @@
             bill,
             numberOfPeople
         });
+    }
+    $: if (reset) {
+        executeReset();
     }
     const dispatcher = createEventDispatcher();
 
@@ -117,6 +121,12 @@
     const optionClickHandler: (any) => void = (event) => {
         const index: number = event.detail.index;
         optionIndex = index;
+    };
+    const executeReset: () => void = () => {
+        billString = "";
+        numberOfPeopleString = "";
+        optionIndex = undefined;
+        dispatcher("did-reset");
     };
     onMount(() => {
         [billInput, numberOfPeopleInput].forEach((input) => {
