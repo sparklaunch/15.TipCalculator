@@ -3,6 +3,8 @@
     import TipOption from "./TipOption.svelte";
     export let tipOptions;
     export let reset;
+    let customTipRateString: string = "";
+    $: customTipRate = Number(customTipRateString);
     let billString: string = "";
     $: bill = Number(billString);
     let numberOfPeopleString: string = "";
@@ -16,7 +18,8 @@
     let isBillZero: boolean = false;
     let isNumberOfPeopleZero: boolean = false;
     let optionIndex: number;
-    $: tipRate = tipOptions[optionIndex];
+    let retainCustomTipRate: boolean = false;
+    $: tipRate = customTipRate > 0 ? customTipRate : tipOptions[optionIndex];
     $: if (tipRate && bill > 0 && numberOfPeople > 0) {
         dispatcher("enable-button");
         dispatcher("ready-to-calculate", {
@@ -117,6 +120,11 @@
         ) {
             isCustomOptionEnabled = false;
         }
+        if (customTipRateString !== "") {
+            retainCustomTipRate = true;
+        } else {
+            retainCustomTipRate = false;
+        }
     };
     const optionClickHandler: (any) => void = (event) => {
         const index: number = event.detail.index;
@@ -126,6 +134,7 @@
         billString = "";
         numberOfPeopleString = "";
         optionIndex = undefined;
+        customTipRateString = "";
         dispatcher("did-reset");
     };
     onMount(() => {
@@ -187,12 +196,13 @@
                 class:focused={isCustomOptionEnabled}
                 on:click={customOptionClickHandler}
             >
-                {#if !isCustomOptionEnabled}
+                {#if !isCustomOptionEnabled && !retainCustomTipRate}
                     <p id="custom-label">Custom</p>
                 {:else}
                     <input
                         type="text"
                         id="custom-input"
+                        bind:value={customTipRateString}
                         bind:this={customOptionField}
                     />
                 {/if}
