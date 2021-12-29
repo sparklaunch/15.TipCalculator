@@ -1,3 +1,22 @@
+<script lang="ts">
+    export let isButtonDisabled;
+    export let data;
+    $: tipRate = data.tipRate;
+    $: bill = data.bill;
+    $: numberOfPeople = data.numberOfPeople;
+    $: tipAmountPerPerson = (bill * (tipRate / 100)) / numberOfPeople;
+    $: stringifiedTipAmountPerPerson = tipAmountPerPerson.toLocaleString(
+        undefined,
+        {
+            minimumFractionDigits: 2
+        }
+    );
+    $: totalPerPerson = (bill * (1 + tipRate / 100)) / numberOfPeople;
+    $: stringifiedTotalPerPerson = totalPerPerson.toLocaleString(undefined, {
+        minimumFractionDigits: 2
+    });
+</script>
+
 <div id="output">
     <div id="tip-amount">
         <div id="tip-amount-text">
@@ -5,7 +24,7 @@
             <p>/ person</p>
         </div>
         <div id="tip-amount-figure">
-            <p>$0.00</p>
+            <p>${stringifiedTipAmountPerPerson}</p>
         </div>
     </div>
     <div id="total">
@@ -14,10 +33,10 @@
             <p>/ person</p>
         </div>
         <div id="total-figure">
-            <p>$0.00</p>
+            <p>${stringifiedTotalPerPerson}</p>
         </div>
     </div>
-    <button id="reset" disabled={true}>RESET</button>
+    <button id="reset" disabled={isButtonDisabled}>RESET</button>
 </div>
 
 <style>
@@ -69,14 +88,25 @@
     #reset {
         margin-top: auto;
         box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
-    }
-    #reset:disabled {
         border: none;
         border-radius: 5px;
         padding: 10px;
         font-size: 18px;
         font-weight: 700;
+        transition: color 0.3s, background-color 0.3s;
+        cursor: pointer;
+    }
+    #reset:disabled {
         color: rgb(3, 81, 86);
         background-color: rgb(15, 93, 98);
+        cursor: auto;
+    }
+    #reset:enabled {
+        background-color: rgb(38, 131, 119);
+        color: white;
+    }
+    #reset:hover {
+        background-color: rgb(148, 229, 219);
+        color: rgb(0, 42, 39);
     }
 </style>

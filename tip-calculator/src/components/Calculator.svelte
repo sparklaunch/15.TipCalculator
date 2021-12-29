@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { afterUpdate, onMount } from "svelte";
+    import { afterUpdate, onMount, createEventDispatcher } from "svelte";
     import TipOption from "./TipOption.svelte";
     export let tipOptions;
     let billString: string = "";
@@ -16,6 +16,15 @@
     let isNumberOfPeopleZero: boolean = false;
     let optionIndex: number;
     $: tipRate = tipOptions[optionIndex];
+    $: if (tipRate && bill > 0 && numberOfPeople > 0) {
+        dispatcher("enable-button");
+        dispatcher("ready-to-calculate", {
+            tipRate,
+            bill,
+            numberOfPeople
+        });
+    }
+    const dispatcher = createEventDispatcher();
 
     // Courtesy of Stackoverflow...
     function setInputFilter(
