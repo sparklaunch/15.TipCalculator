@@ -5,6 +5,7 @@
     $: bill = data.bill;
     $: numberOfPeople = data.numberOfPeople;
     $: tipAmountPerPerson = (bill * (tipRate / 100)) / numberOfPeople;
+    $: isTipAmountPerPersonNaN = Number.isNaN(tipAmountPerPerson);
     $: stringifiedTipAmountPerPerson = tipAmountPerPerson.toLocaleString(
         undefined,
         {
@@ -12,6 +13,7 @@
         }
     );
     $: totalPerPerson = (bill * (1 + tipRate / 100)) / numberOfPeople;
+    $: isTotalPerPersonNaN = Number.isNaN(totalPerPerson);
     $: stringifiedTotalPerPerson = totalPerPerson.toLocaleString(undefined, {
         minimumFractionDigits: 2
     });
@@ -24,7 +26,11 @@
             <p>/ person</p>
         </div>
         <div id="tip-amount-figure">
-            <p>${stringifiedTipAmountPerPerson}</p>
+            {#if isTipAmountPerPersonNaN}
+                <p>$0.00</p>
+            {:else}
+                <p>${stringifiedTipAmountPerPerson}</p>
+            {/if}
         </div>
     </div>
     <div id="total">
@@ -33,7 +39,11 @@
             <p>/ person</p>
         </div>
         <div id="total-figure">
-            <p>${stringifiedTotalPerPerson}</p>
+            {#if isTotalPerPersonNaN}
+                <p>$0.00</p>
+            {:else}
+                <p>${stringifiedTotalPerPerson}</p>
+            {/if}
         </div>
     </div>
     <button id="reset" disabled={isButtonDisabled}>RESET</button>
