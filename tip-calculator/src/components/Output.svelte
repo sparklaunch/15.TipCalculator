@@ -133,4 +133,12 @@
         background-color: rgb(148, 229, 219);
         color: rgb(0, 42, 39);
     }
+    @media all and (max-width: 1440px) {
+        #output {
+            width: 100%;
+        }
+        #total {
+            margin-bottom: 30px;
+        }
+    }
 </style>

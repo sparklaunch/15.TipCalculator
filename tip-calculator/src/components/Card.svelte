@@ -50,4 +50,12 @@
         box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
         justify-content: space-between;
     }
+    @media all and (max-width: 1440px) {
+        #card {
+            flex-direction: column;
+            width: 100%;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+    }
 </style>

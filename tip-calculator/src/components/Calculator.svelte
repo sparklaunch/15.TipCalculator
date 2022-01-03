@@ -365,4 +365,10 @@
         font-weight: 700;
         color: rgb(198, 114, 99);
     }
+    @media all and (max-width: 1440px) {
+        #calculator {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+    }
 </style>
